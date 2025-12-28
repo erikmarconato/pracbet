@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface OddsRepository extends JpaRepository<OddsEntity, Long> {
     List<OddsEntity> findByMatchId(Long matchId);
+
+    List<OddsEntity> findAllByMatchId(Long matchId);
 }
+

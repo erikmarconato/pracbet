@@ -24,10 +24,10 @@ public class OddsEntity {
     private MatchesEntity match;
 
     @Column(name = "bet_type")
-    private String betType;
+    private String betType; //marketName
 
     @Column(name = "value")
-    private String value;
+    private String value; //selectionName
 
     @Column(name = "odd")
     private Double odd;
