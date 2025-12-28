@@ -10,8 +10,11 @@ import java.util.List;
 @Service
 public class MatchOddsService {
 
-    @Autowired
-    OddsRepository oddsRepository;
+    private OddsRepository oddsRepository;
+
+    public MatchOddsService(OddsRepository oddsRepository) {
+        this.oddsRepository = oddsRepository;
+    }
 
     public List<OddsDto> filterMatchById(Long id) {
         return oddsRepository.findByMatchId(id).stream()

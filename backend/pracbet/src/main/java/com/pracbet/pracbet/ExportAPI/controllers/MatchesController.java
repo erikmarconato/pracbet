@@ -12,8 +12,11 @@ import java.util.List;
 @CrossOrigin
 public class MatchesController {
 
-    @Autowired
-    MatchesService matchesService;
+    private final MatchesService matchesService;
+
+    public MatchesController(MatchesService matchesService) {
+        this.matchesService = matchesService;
+    }
 
     @GetMapping("/{date}")
     public List<MatchesDto> listMatchesByDate(@PathVariable String date) {

@@ -5,7 +5,6 @@ import com.pracbet.pracbet.ExportAPI.dtos.OddsDto;
 import com.pracbet.pracbet.FootballAPI.entities.MatchesEntity;
 import com.pracbet.pracbet.FootballAPI.repositories.MatchesRepository;
 import com.pracbet.pracbet.FootballAPI.repositories.OddsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,11 +16,14 @@ import java.util.stream.Collectors;
 @Service
 public class MatchesService {
 
-    @Autowired
-    MatchesRepository matchesRepository;
 
-    @Autowired
-    OddsRepository oddsRepository;
+    private final MatchesRepository matchesRepository;
+    private final OddsRepository oddsRepository;
+
+    public MatchesService(MatchesRepository matchesRepository, OddsRepository oddsRepository) {
+        this.matchesRepository = matchesRepository;
+        this.oddsRepository = oddsRepository;
+    }
 
     public List<MatchesDto> listMatchesByDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");

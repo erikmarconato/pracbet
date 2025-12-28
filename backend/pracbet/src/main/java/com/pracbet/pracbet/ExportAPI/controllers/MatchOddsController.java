@@ -12,8 +12,11 @@ import java.util.List;
 @CrossOrigin
 public class MatchOddsController {
 
-    @Autowired
-    MatchOddsService matchOddsService;
+    private final MatchOddsService matchOddsService;
+
+    public MatchOddsController(MatchOddsService matchOddsService) {
+        this.matchOddsService = matchOddsService;
+    }
 
     @GetMapping("/{id}")
     public List<OddsDto> filterMatchById(@PathVariable Long id){
