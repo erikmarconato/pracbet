@@ -1,9 +1,6 @@
 package com.pracbet.pracbet.Bet.exceptions.controller;
 
-import com.pracbet.pracbet.Bet.exceptions.InvalidMarketException;
-import com.pracbet.pracbet.Bet.exceptions.InvalidOddException;
-import com.pracbet.pracbet.Bet.exceptions.InvalidSelectionException;
-import com.pracbet.pracbet.Bet.exceptions.MatchDoesNotExistException;
+import com.pracbet.pracbet.Bet.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,5 +27,10 @@ public class BetExceptionHandler {
     @ExceptionHandler(InvalidOddException.class)
     public ResponseEntity<String> handleInvalidOddException (InvalidOddException exception){
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(MatchAlreadyStartedException.class)
+    public ResponseEntity<String> handleMatchAlreadyStartedException (MatchAlreadyStartedException exception){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getMessage());
     }
 }

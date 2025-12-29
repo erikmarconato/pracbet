@@ -3,12 +3,10 @@ package com.pracbet.pracbet.Bet.services;
 import com.pracbet.pracbet.Bet.dtos.BetInputDto;
 import com.pracbet.pracbet.Bet.entities.BetEntity;
 import com.pracbet.pracbet.Bet.enums.StatusBetEnum;
-import com.pracbet.pracbet.Bet.exceptions.InvalidMarketException;
-import com.pracbet.pracbet.Bet.exceptions.InvalidOddException;
-import com.pracbet.pracbet.Bet.exceptions.InvalidSelectionException;
-import com.pracbet.pracbet.Bet.exceptions.MatchDoesNotExistException;
+import com.pracbet.pracbet.Bet.exceptions.*;
 import com.pracbet.pracbet.Bet.repositories.BetRepository;
 import com.pracbet.pracbet.FootballAPI.entities.OddsEntity;
+import com.pracbet.pracbet.FootballAPI.repositories.MatchesRepository;
 import com.pracbet.pracbet.FootballAPI.repositories.OddsRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,25 +15,33 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BetService {
 
     private final BetRepository betRepository;
     private final OddsRepository oddsRepository;
+    private final MatchesRepository matchesRepository;
 
-    public BetService(BetRepository betRepository, OddsRepository oddsRepository){
+    public BetService(BetRepository betRepository, OddsRepository oddsRepository, MatchesRepository matchesRepository){
         this.betRepository = betRepository;
         this.oddsRepository = oddsRepository;
+        this.matchesRepository = matchesRepository;
     }
 
     public ResponseEntity<Void> createBet(BetInputDto betInputDto) {
 
         List<OddsEntity> odds = oddsRepository.findAllByMatchId(betInputDto.matchId());
+        var match = matchesRepository.findMatchById(betInputDto.matchId()).orElseThrow(() -> new MatchDoesNotExistException("Match not found"));
 
         if (odds.isEmpty()) {
             throw new MatchDoesNotExistException("Match not found");
         }
+
+       if (!Objects.equals(match.getStatusMatch(), "NS")){
+           throw new MatchAlreadyStartedException("Betting is not allowed after the match has started");
+       }
 
         boolean marketExists = odds.stream()
                 .anyMatch(o -> o.getBetType().equalsIgnoreCase(betInputDto.marketName()));

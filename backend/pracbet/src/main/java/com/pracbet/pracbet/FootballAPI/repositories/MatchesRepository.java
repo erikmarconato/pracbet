@@ -18,4 +18,6 @@ public interface MatchesRepository extends JpaRepository<MatchesEntity, Long> {
     List<MatchesEntity> findByStatusMatchAndOddsUploaded(String statusMatch, Boolean oddsUploaded);
 
     List<MatchesEntity> findByMatchDateBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+    Optional<MatchesEntity> findMatchById(Long matchId);
 }
