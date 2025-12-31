@@ -65,7 +65,7 @@ public class UserService {
         boolean usernameExists = userRepository.existsByUsername(updateUsernameDto.username());
 
         if(user.getIsActive().equals(false)){
-            throw new InactiveUserException("It is not possible to edit a user who is not active.");
+            throw new InactiveUserException("It is not possible to edit a user who is not active");
         }
 
         if (Objects.equals(user.getUsername(), updateUsernameDto.username())){

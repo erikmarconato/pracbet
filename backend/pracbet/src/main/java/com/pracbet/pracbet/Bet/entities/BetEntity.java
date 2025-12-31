@@ -50,9 +50,11 @@ public class BetEntity {
     @Column(name = "maxPayout")
     private BigDecimal maxPayout;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "statusBetEnum")
     private StatusBetEnum statusBetEnum;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "resultBetEnum")
     private ResultBetEnum resultBetEnum;
 

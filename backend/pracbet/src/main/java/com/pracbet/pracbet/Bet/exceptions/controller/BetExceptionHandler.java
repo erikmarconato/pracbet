@@ -38,9 +38,4 @@ public class BetExceptionHandler {
     public ResponseEntity<String> handleInvalidBalanceException (InvalidBalanceException exception){
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getMessage());
     }
-
-    @ExceptionHandler(UserExistsException.class)
-    public ResponseEntity<String> handleUserExistsException (UserExistsException exception){
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
-    }
 }

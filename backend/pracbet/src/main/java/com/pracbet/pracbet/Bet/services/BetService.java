@@ -8,6 +8,8 @@ import com.pracbet.pracbet.Bet.repositories.BetRepository;
 import com.pracbet.pracbet.FootballAPI.entities.OddsEntity;
 import com.pracbet.pracbet.FootballAPI.repositories.MatchesRepository;
 import com.pracbet.pracbet.FootballAPI.repositories.OddsRepository;
+import com.pracbet.pracbet.User.exceptions.CheckIfTheUserExistsException;
+import com.pracbet.pracbet.User.exceptions.InactiveUserException;
 import com.pracbet.pracbet.User.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -86,11 +88,13 @@ public class BetService {
                 .orElseThrow(() -> new InvalidOddException("Odd not found"));
 
 
-        var user = userRepository.findById(betInputDto.userId()).orElseThrow(() -> new UserExistsException("User does not exist"));
+        var user = userRepository.findById(betInputDto.userId()).orElseThrow(() -> new CheckIfTheUserExistsException("User does not exist"));
+        if(!user.getIsActive()){
+            throw new InactiveUserException("It is not possible to place a bet with a user who is not active");
+        }
         if (user.getBalance().compareTo(betInputDto.stake()) < 0){
             throw new InvalidBalanceException("The user does not have sufficient funds to place a bet");
         }
-
         user.setBalance(user.getBalance().subtract(betInputDto.stake()));
         userRepository.save(user);
 
@@ -102,8 +106,9 @@ public class BetService {
         bet.setOdd(BigDecimal.valueOf(chosenOdd.getOdd()));
         bet.setStake(betInputDto.stake());
         bet.setPossiblePayout(betInputDto.stake().multiply(BigDecimal.valueOf(chosenOdd.getOdd())));
-        bet.setCreatedAt(LocalDateTime.now());
         bet.setStatusBetEnum(StatusBetEnum.Pending);
+        bet.setCreatedAt(LocalDateTime.now());
+
 
         betRepository.save(bet);
 
