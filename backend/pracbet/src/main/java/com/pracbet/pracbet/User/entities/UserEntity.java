@@ -1,5 +1,6 @@
 package com.pracbet.pracbet.User.entities;
 
+import com.pracbet.pracbet.Bet.entities.BetEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -32,6 +34,9 @@ public class UserEntity {
     private String password;
 
     //private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<BetEntity> bets;
 
     @Column(name = "balance")
     private BigDecimal balance;

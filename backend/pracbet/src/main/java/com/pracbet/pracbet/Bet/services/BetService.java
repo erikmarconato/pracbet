@@ -8,6 +8,8 @@ import com.pracbet.pracbet.Bet.repositories.BetRepository;
 import com.pracbet.pracbet.FootballAPI.entities.OddsEntity;
 import com.pracbet.pracbet.FootballAPI.repositories.MatchesRepository;
 import com.pracbet.pracbet.FootballAPI.repositories.OddsRepository;
+import com.pracbet.pracbet.User.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,13 +25,16 @@ public class BetService {
     private final BetRepository betRepository;
     private final OddsRepository oddsRepository;
     private final MatchesRepository matchesRepository;
+    private final UserRepository userRepository;
 
-    public BetService(BetRepository betRepository, OddsRepository oddsRepository, MatchesRepository matchesRepository){
+    public BetService(BetRepository betRepository, OddsRepository oddsRepository, MatchesRepository matchesRepository, UserRepository userRepository){
         this.betRepository = betRepository;
         this.oddsRepository = oddsRepository;
         this.matchesRepository = matchesRepository;
+        this.userRepository = userRepository;
     }
 
+    @Transactional
     public ResponseEntity<Void> createBet(BetInputDto betInputDto) {
 
         List<OddsEntity> odds = oddsRepository.findAllByMatchId(betInputDto.matchId());
@@ -80,7 +85,17 @@ public class BetService {
                 .findFirst()
                 .orElseThrow(() -> new InvalidOddException("Odd not found"));
 
+
+        var user = userRepository.findById(betInputDto.userId()).orElseThrow(() -> new UserExistsException("User does not exist"));
+        if (user.getBalance().compareTo(betInputDto.stake()) < 0){
+            throw new InvalidBalanceException("The user does not have sufficient funds to place a bet");
+        }
+
+        user.setBalance(user.getBalance().subtract(betInputDto.stake()));
+        userRepository.save(user);
+
         BetEntity bet = new BetEntity();
+        bet.setUser(user);
         bet.setMatchId(betInputDto.matchId());
         bet.setMarketName(betInputDto.marketName());
         bet.setSelectionName(betInputDto.selectionName());

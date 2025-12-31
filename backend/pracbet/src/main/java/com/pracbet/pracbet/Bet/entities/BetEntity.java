@@ -2,6 +2,7 @@ package com.pracbet.pracbet.Bet.entities;
 
 import com.pracbet.pracbet.Bet.enums.ResultBetEnum;
 import com.pracbet.pracbet.Bet.enums.StatusBetEnum;
+import com.pracbet.pracbet.User.entities.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +25,9 @@ public class BetEntity {
     @Column(name = "id")
     private Long id;
 
-    //private User userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
     @Column(name = "matchId")
     private Long matchId;
