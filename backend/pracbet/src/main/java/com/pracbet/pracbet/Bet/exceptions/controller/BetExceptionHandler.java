@@ -38,4 +38,10 @@ public class BetExceptionHandler {
     public ResponseEntity<String> handleInvalidBalanceException (InvalidBalanceException exception){
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getMessage());
     }
+
+    @ExceptionHandler(MaxPayoutBetException.class)
+    public ResponseEntity<String> handleMaxPayoutBetException (MaxPayoutBetException exception){
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
+    }
+
 }

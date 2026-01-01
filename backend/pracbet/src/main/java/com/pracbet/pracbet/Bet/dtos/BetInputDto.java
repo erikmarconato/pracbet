@@ -8,6 +8,7 @@ public record BetInputDto(
         String marketName, //bettype
         String selectionName, //value
         BigDecimal odd,
-        BigDecimal stake
+        BigDecimal stake,
+        BigDecimal maxPayout
 ) {
 }

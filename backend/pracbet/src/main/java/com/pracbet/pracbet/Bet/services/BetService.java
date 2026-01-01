@@ -95,7 +95,15 @@ public class BetService {
         if (user.getBalance().compareTo(betInputDto.stake()) < 0){
             throw new InvalidBalanceException("The user does not have sufficient funds to place a bet");
         }
+
+        if (betInputDto.maxPayout() != null){
+            if (betInputDto.maxPayout().compareTo(betInputDto.stake()) < 0){
+                throw new MaxPayoutBetException("The bet amount exceeds the allowed limit");
+            }
+        }
+
         user.setBalance(user.getBalance().subtract(betInputDto.stake()));
+        user.setTotalBets(user.getTotalBets() + 1);
         userRepository.save(user);
 
         BetEntity bet = new BetEntity();
@@ -108,7 +116,6 @@ public class BetService {
         bet.setPossiblePayout(betInputDto.stake().multiply(BigDecimal.valueOf(chosenOdd.getOdd())));
         bet.setStatusBetEnum(StatusBetEnum.Pending);
         bet.setCreatedAt(LocalDateTime.now());
-
 
         betRepository.save(bet);
 
