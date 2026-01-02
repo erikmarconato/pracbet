@@ -1,6 +1,7 @@
 package com.pracbet.pracbet.Bet.entities;
 
 import com.pracbet.pracbet.Bet.enums.ResultBetEnum;
+import com.pracbet.pracbet.Bet.enums.SettledByBetEnum;
 import com.pracbet.pracbet.Bet.enums.StatusBetEnum;
 import com.pracbet.pracbet.User.entities.UserEntity;
 import jakarta.persistence.*;
@@ -67,6 +68,7 @@ public class BetEntity {
     @Column(name = "updatedAt")
     private LocalDateTime updatedAt;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "settledBy")
-    private String settledBy;
+    private SettledByBetEnum settledBy;
 }

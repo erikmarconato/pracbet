@@ -16,6 +16,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -41,8 +42,7 @@ public class OddsSearchService {
             "Corners 1x2",
             "Corners Over Under",
             "Cards Over/Under",
-            "Total ShotOnGoal",
-            "Shot On Target 1x2"
+            "Total ShotOnGoal"
     );
 
     public OddsSearchService(RestTemplate restTemplate, MatchesRepository matchesRepository, OddsRepository oddsRepository, ObjectMapper objectMapper) {
@@ -52,7 +52,7 @@ public class OddsSearchService {
         this.objectMapper = objectMapper;
     }
 
-    @Scheduled(cron = "20 52 23 * * ?")
+    @Scheduled(cron = "20 49 02 * * ?")
     public void fetchOddsForMatches() {
         List<MatchesEntity> matches = matchesRepository.findByStatusMatchAndOddsUploaded("NS", false);
 
@@ -171,7 +171,7 @@ public class OddsSearchService {
                                     oddsEntity.setMatch(match);
                                     oddsEntity.setBetType(betType);
                                     oddsEntity.setValue(outcome);
-                                    oddsEntity.setOdd(odd);
+                                    oddsEntity.setOdd(BigDecimal.valueOf(odd));
 
                                     oddsRepository.save(oddsEntity);
                                 }

@@ -35,7 +35,7 @@ public class MatchStatisticsSearchService {
         this.restTemplate = restTemplate;
     }
 
-    @Scheduled(cron = "10 52 23 * * ?")
+    @Scheduled(cron = "10 41 02 * * ?")
     public void fetchAndSaveMatchStatistics() {
         List<MatchesEntity> finishedMatchesFT = matchesRepository.findByStatusMatch("FT"); //terminada em tempo normal
         List<MatchesEntity> finishedMatchesAET = matchesRepository.findByStatusMatch("AET"); //terminada em prorrogação

@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface MatchStatisticsRepository extends JpaRepository<MatchStatisticsEntity, Long> {
 
-    Optional<MatchStatisticsEntity> findByMatch(MatchesEntity match);
+    Optional<MatchStatisticsEntity> findByMatchId(Long match_id);
 }

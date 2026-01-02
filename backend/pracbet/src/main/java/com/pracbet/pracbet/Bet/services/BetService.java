@@ -71,7 +71,7 @@ public class BetService {
                 .anyMatch(o ->
                         o.getBetType().equalsIgnoreCase(betInputDto.marketName()) &&
                                 o.getValue().equalsIgnoreCase(betInputDto.selectionName()) &&
-                                new BigDecimal(o.getOdd()).compareTo(betInputDto.odd()) == 0
+                                new BigDecimal(String.valueOf(o.getOdd())).compareTo(betInputDto.odd()) == 0
                 );
 
         if (!oddExists) {
@@ -82,7 +82,7 @@ public class BetService {
                 .filter(o ->
                         o.getBetType().equalsIgnoreCase(betInputDto.marketName()) &&
                                 o.getValue().equalsIgnoreCase(betInputDto.selectionName()) &&
-                                new BigDecimal(o.getOdd()).compareTo(betInputDto.odd()) == 0
+                                new BigDecimal(String.valueOf(o.getOdd())).compareTo(betInputDto.odd()) == 0
                 )
                 .findFirst()
                 .orElseThrow(() -> new InvalidOddException("Odd not found"));
@@ -111,9 +111,9 @@ public class BetService {
         bet.setMatchId(betInputDto.matchId());
         bet.setMarketName(betInputDto.marketName());
         bet.setSelectionName(betInputDto.selectionName());
-        bet.setOdd(BigDecimal.valueOf(chosenOdd.getOdd()));
+        bet.setOdd(chosenOdd.getOdd());
         bet.setStake(betInputDto.stake());
-        bet.setPossiblePayout(betInputDto.stake().multiply(BigDecimal.valueOf(chosenOdd.getOdd())));
+        bet.setPossiblePayout(betInputDto.stake().multiply(chosenOdd.getOdd()));
         bet.setStatusBetEnum(StatusBetEnum.Pending);
         bet.setCreatedAt(LocalDateTime.now());
 

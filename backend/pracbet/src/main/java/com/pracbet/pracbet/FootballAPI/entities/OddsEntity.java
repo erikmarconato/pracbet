@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "odds")
 @Getter
@@ -30,12 +32,5 @@ public class OddsEntity {
     private String value; //selectionName
 
     @Column(name = "odd")
-    private Double odd;
-
-    public OddsEntity(MatchesEntity match, String betType, String value, Double odd) {
-        this.match = match;
-        this.betType = betType;
-        this.value = value;
-        this.odd = odd;
-    }
+    private BigDecimal odd;
 }
