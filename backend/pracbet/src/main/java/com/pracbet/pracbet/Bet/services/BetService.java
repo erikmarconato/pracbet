@@ -124,31 +124,41 @@ public class BetService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public ResponseEntity<Stream<BetResponseListByUserIdDto>> listAllBetsByUserId(Long userId){
-        List<BetEntity> bets = betRepository.findAllBetsByUserId(userId);
+    public ResponseEntity<Stream<BetResponseListByUserIdDto>> listAllBetsFilteredByUserID(Long userId, StatusBetEnum status) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(bets.stream().map(bet -> new BetResponseListByUserIdDto(
-                bet.getId(),
-                bet.getUser().getUsername(),
-                bet.getMatch().getLeague(),
-                bet.getMatch().getHomeTeam(),
-                bet.getMatch().getAwayTeam(),
-                bet.getMatch().getImgHomeTeam(),
-                bet.getMatch().getImgAwayTeam(),
-                bet.getMatch().getMatchDate(),
-                bet.getMarketName(),
-                bet.getSelectionName(),
-                bet.getOdd(),
-                bet.getStake(),
-                bet.getPossiblePayout(),
-                bet.getMaxPayout(),
-                bet.getStatusBetEnum(),
-                bet.getResultBetEnum(),
-                bet.getSettledAt(),
-                bet.getCreatedAt(),
-                bet.getUpdatedAt(),
-                bet.getSettledBy()
-        )));
+        List<BetEntity> bets = List.of();
+
+        if (status == null) {
+            bets = betRepository.findAllBetsByUserId(userId);
+        }
+        if (status != null){
+            bets = betRepository.findAllBetsByUserIdAndStatus(userId, status);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                bets.stream().map(bet -> new BetResponseListByUserIdDto(
+                        bet.getId(),
+                        bet.getUser().getUsername(),
+                        bet.getMatch().getLeague(),
+                        bet.getMatch().getHomeTeam(),
+                        bet.getMatch().getAwayTeam(),
+                        bet.getMatch().getImgHomeTeam(),
+                        bet.getMatch().getImgAwayTeam(),
+                        bet.getMatch().getMatchDate(),
+                        bet.getMarketName(),
+                        bet.getSelectionName(),
+                        bet.getOdd(),
+                        bet.getStake(),
+                        bet.getPossiblePayout(),
+                        bet.getMaxPayout(),
+                        bet.getStatusBetEnum(),
+                        bet.getResultBetEnum(),
+                        bet.getSettledAt(),
+                        bet.getCreatedAt(),
+                        bet.getUpdatedAt(),
+                        bet.getSettledBy()
+                ))
+        );
     }
 
 }

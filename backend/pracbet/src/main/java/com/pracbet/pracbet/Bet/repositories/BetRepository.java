@@ -17,6 +17,17 @@ public interface BetRepository extends JpaRepository<BetEntity, Long> {
     SELECT b
     FROM BetEntity b
     WHERE b.user.id = :userId
+      AND b.statusBetEnum = :status
+""")
+    List<BetEntity> findAllBetsByUserIdAndStatus(
+            @Param("userId") Long userId,
+            @Param("status") StatusBetEnum status
+    );
+
+    @Query("""
+    SELECT b
+    FROM BetEntity b
+    WHERE b.user.id = :userId
 """)
     List<BetEntity> findAllBetsByUserId(@Param("userId") Long userId);
 
