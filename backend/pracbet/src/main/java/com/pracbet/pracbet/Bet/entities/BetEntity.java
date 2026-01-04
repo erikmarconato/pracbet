@@ -3,6 +3,7 @@ package com.pracbet.pracbet.Bet.entities;
 import com.pracbet.pracbet.Bet.enums.ResultBetEnum;
 import com.pracbet.pracbet.Bet.enums.SettledByBetEnum;
 import com.pracbet.pracbet.Bet.enums.StatusBetEnum;
+import com.pracbet.pracbet.FootballAPI.entities.MatchesEntity;
 import com.pracbet.pracbet.User.entities.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,8 +31,9 @@ public class BetEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Column(name = "matchId")
-    private Long matchId;
+    @ManyToOne
+    @JoinColumn(name = "match_id")
+    private MatchesEntity match;
 
     @Column(name = "marketName")
     private String marketName;

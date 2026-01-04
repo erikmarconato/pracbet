@@ -1,6 +1,7 @@
 package com.pracbet.pracbet.Bet.services;
 
 import com.pracbet.pracbet.Bet.dtos.BetInputDto;
+import com.pracbet.pracbet.Bet.dtos.BetResponseListByUserIdDto;
 import com.pracbet.pracbet.Bet.entities.BetEntity;
 import com.pracbet.pracbet.Bet.enums.StatusBetEnum;
 import com.pracbet.pracbet.Bet.exceptions.*;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class BetService {
@@ -108,7 +110,7 @@ public class BetService {
 
         BetEntity bet = new BetEntity();
         bet.setUser(user);
-        bet.setMatchId(betInputDto.matchId());
+        bet.setMatch(match);
         bet.setMarketName(betInputDto.marketName());
         bet.setSelectionName(betInputDto.selectionName());
         bet.setOdd(chosenOdd.getOdd());
@@ -120,6 +122,33 @@ public class BetService {
         betRepository.save(bet);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    public ResponseEntity<Stream<BetResponseListByUserIdDto>> listAllBetsByUserId(Long userId){
+        List<BetEntity> bets = betRepository.findAllBetsByUserId(userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(bets.stream().map(bet -> new BetResponseListByUserIdDto(
+                bet.getId(),
+                bet.getUser().getUsername(),
+                bet.getMatch().getLeague(),
+                bet.getMatch().getHomeTeam(),
+                bet.getMatch().getAwayTeam(),
+                bet.getMatch().getImgHomeTeam(),
+                bet.getMatch().getImgAwayTeam(),
+                bet.getMatch().getMatchDate(),
+                bet.getMarketName(),
+                bet.getSelectionName(),
+                bet.getOdd(),
+                bet.getStake(),
+                bet.getPossiblePayout(),
+                bet.getMaxPayout(),
+                bet.getStatusBetEnum(),
+                bet.getResultBetEnum(),
+                bet.getSettledAt(),
+                bet.getCreatedAt(),
+                bet.getUpdatedAt(),
+                bet.getSettledBy()
+        )));
     }
 
 }

@@ -42,7 +42,7 @@ public class BetPaymentService {
         for (BetEntity bet : bets) {
 
             var stats = matchStatisticsRepository
-                    .findByMatchId(bet.getMatchId())
+                    .findByMatchId(bet.getMatch().getId())
                     .orElse(null);
 
             if (stats == null) continue;
