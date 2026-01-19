@@ -6,6 +6,8 @@ import com.pracbet.pracbet.User.exceptions.*;
 import com.pracbet.pracbet.User.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,15 +20,17 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public ResponseEntity<UserResponseDto> createUser (UserInputDto userInputDto){
+    public ResponseEntity<UserResponseDto> registerUser (UserRegisterInputDto userRegisterInputDto){
 
-        var usernameExists = userRepository.existsByUsername(userInputDto.username());
-        var emailExists = userRepository.existsByEmail(userInputDto.email());
+        var usernameExists = userRepository.existsByUsername(userRegisterInputDto.username());
+        var emailExists = userRepository.existsByEmail(userRegisterInputDto.email());
 
         if (usernameExists){
             throw new CheckIfTheUsernameExistsException("Username already exists");
@@ -36,9 +40,9 @@ public class UserService {
         }
 
         UserEntity user = new UserEntity();
-        user.setUsername(userInputDto.username());
-        user.setEmail(userInputDto.email());
-        user.setPassword(userInputDto.password());
+        user.setUsername(userRegisterInputDto.username());
+        user.setEmail(userRegisterInputDto.email());
+        user.setPassword(new BCryptPasswordEncoder().encode(userRegisterInputDto.password()));
         user.setBalance(BigDecimal.valueOf(1000));
         user.setTotalBets(0);
         user.setCreatedAt(LocalDateTime.now());

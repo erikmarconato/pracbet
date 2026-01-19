@@ -1,8 +1,7 @@
 package com.pracbet.pracbet.User.dtos;
 
-public record UserInputDto(
+public record UserLoginInputDto(
         String username,
-        String email,
         String password
 ) {
 }

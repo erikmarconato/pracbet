@@ -2,6 +2,7 @@ package com.pracbet.pracbet.User.repositories;
 
 import com.pracbet.pracbet.User.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Boolean existsByEmail(String email);
 
     List<UserEntity> findByIsActive(Boolean isActive);
+
+    UserDetails findByUsername(String username);
 }
 
 
