@@ -3,6 +3,7 @@ package com.pracbet.pracbet.Bet.services;
 import com.pracbet.pracbet.Bet.dtos.BetInputDto;
 import com.pracbet.pracbet.Bet.dtos.BetResponseListByUserIdDto;
 import com.pracbet.pracbet.Bet.entities.BetEntity;
+import com.pracbet.pracbet.Bet.enums.ResultBetEnum;
 import com.pracbet.pracbet.Bet.enums.StatusBetEnum;
 import com.pracbet.pracbet.Bet.exceptions.*;
 import com.pracbet.pracbet.Bet.repositories.BetRepository;
@@ -12,6 +13,7 @@ import com.pracbet.pracbet.FootballAPI.repositories.OddsRepository;
 import com.pracbet.pracbet.User.exceptions.CheckIfTheUserExistsException;
 import com.pracbet.pracbet.User.exceptions.InactiveUserException;
 import com.pracbet.pracbet.User.repositories.UserRepository;
+import com.pracbet.pracbet.User.services.UserLevelService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +32,14 @@ public class BetService {
     private final OddsRepository oddsRepository;
     private final MatchesRepository matchesRepository;
     private final UserRepository userRepository;
+    private final UserLevelService userLevelService;
 
-    public BetService(BetRepository betRepository, OddsRepository oddsRepository, MatchesRepository matchesRepository, UserRepository userRepository){
+    public BetService(BetRepository betRepository, OddsRepository oddsRepository, MatchesRepository matchesRepository, UserRepository userRepository, UserLevelService userLevelService){
         this.betRepository = betRepository;
         this.oddsRepository = oddsRepository;
         this.matchesRepository = matchesRepository;
         this.userRepository = userRepository;
+        this.userLevelService = userLevelService;
     }
 
     @Transactional
@@ -106,6 +110,7 @@ public class BetService {
 
         user.setBalance(user.getBalance().subtract(betInputDto.stake()));
         user.setTotalBets(user.getTotalBets() + 1);
+        userLevelService.addXp(user.getId(), 3);
         userRepository.save(user);
 
         BetEntity bet = new BetEntity();
@@ -116,6 +121,7 @@ public class BetService {
         bet.setOdd(chosenOdd.getOdd());
         bet.setStake(betInputDto.stake());
         bet.setPossiblePayout(betInputDto.stake().multiply(chosenOdd.getOdd()));
+        bet.setStakeUnits(1);
         bet.setStatusBetEnum(StatusBetEnum.Pending);
         bet.setCreatedAt(LocalDateTime.now());
 
@@ -124,19 +130,29 @@ public class BetService {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public ResponseEntity<Stream<BetResponseListByUserIdDto>> listAllBetsFilteredByUserID(Long userId, StatusBetEnum status) {
+    public ResponseEntity<Stream<BetResponseListByUserIdDto>> listAllBetsFilteredByUserID(
+            Long userId,
+            StatusBetEnum status,
+            ResultBetEnum result
+    ) {
 
-        List<BetEntity> bets = List.of();
+        List<BetEntity> bets = betRepository.findAllBetsByUserId(userId);
 
-        if (status == null) {
-            bets = betRepository.findAllBetsByUserId(userId);
+        Stream<BetEntity> filtered = bets.stream();
+
+        if (status != null) {
+            filtered = filtered.filter(b -> b.getStatusBetEnum() == status);
         }
-        if (status != null){
-            bets = betRepository.findAllBetsByUserIdAndStatus(userId, status);
+
+        if (result != null) {
+            filtered = filtered.filter(b -> b.getResultBetEnum() == result);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(
-                bets.stream().map(bet -> new BetResponseListByUserIdDto(
+        // ORDEM DECRESCENTE POR ID (mais recente -> mais antigo)
+        filtered = filtered.sorted((a, b) -> b.getId().compareTo(a.getId()));
+
+        Stream<BetResponseListByUserIdDto> responseStream =
+                filtered.map(bet -> new BetResponseListByUserIdDto(
                         bet.getId(),
                         bet.getUser().getUsername(),
                         bet.getMatch().getLeague(),
@@ -157,8 +173,11 @@ public class BetService {
                         bet.getCreatedAt(),
                         bet.getUpdatedAt(),
                         bet.getSettledBy()
-                ))
-        );
+                ));
+
+        return ResponseEntity.ok(responseStream);
     }
+
+
 
 }

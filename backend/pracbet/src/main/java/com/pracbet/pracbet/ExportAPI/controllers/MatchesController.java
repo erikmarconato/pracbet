@@ -18,8 +18,8 @@ public class MatchesController {
         this.matchesService = matchesService;
     }
 
-    @GetMapping("/{date}")
-    public List<MatchesDto> listMatchesByDate(@PathVariable String date) {
-        return matchesService.listMatchesByDate(date);
+    @GetMapping()
+    public List<MatchesDto> listMatchesByDate() {
+        return matchesService.listNotStartedMatches();
     }
 }

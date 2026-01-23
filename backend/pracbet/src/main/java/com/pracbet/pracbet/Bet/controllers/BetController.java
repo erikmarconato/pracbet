@@ -2,6 +2,7 @@ package com.pracbet.pracbet.Bet.controllers;
 
 import com.pracbet.pracbet.Bet.dtos.BetInputDto;
 import com.pracbet.pracbet.Bet.dtos.BetResponseListByUserIdDto;
+import com.pracbet.pracbet.Bet.enums.ResultBetEnum;
 import com.pracbet.pracbet.Bet.enums.StatusBetEnum;
 import com.pracbet.pracbet.Bet.services.BetService;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,11 @@ public class BetController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Stream<BetResponseListByUserIdDto>> listAllBetsFilteredByUserID(@PathVariable Long userId, @RequestParam(required = false) StatusBetEnum status){
-        return betService.listAllBetsFilteredByUserID(userId,status);
+    public ResponseEntity<Stream<BetResponseListByUserIdDto>> listAllBetsFilteredByUserID(
+            @PathVariable Long userId,
+            @RequestParam(required = false) StatusBetEnum status, // /bet/iddousuario?status=Pending ou Settled ou Void ou Rejected
+            @RequestParam(required = false) ResultBetEnum result  // /bet/iddousuario?result=Won ou Lost ou Void ou Refunded
+    ) {
+        return betService.listAllBetsFilteredByUserID(userId, status, result);
     }
 }

@@ -25,14 +25,8 @@ public class MatchesService {
         this.oddsRepository = oddsRepository;
     }
 
-    public List<MatchesDto> listMatchesByDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate localDate = LocalDate.parse(date, formatter);
-
-        LocalDateTime startOfDay = localDate.atStartOfDay();
-        LocalDateTime endOfDay = localDate.atTime(23, 59, 59);
-
-        List<MatchesEntity> matchesEntityList = matchesRepository.findByMatchDateBetween(startOfDay, endOfDay);
+    public List<MatchesDto> listNotStartedMatches() {
+        List<MatchesEntity> matchesEntityList = matchesRepository.findByStatusMatch("NS");
 
         return matchesEntityList.stream().map(matchesEntity -> {
             List<OddsDto> filteredOdds = oddsRepository.findByMatchId(matchesEntity.getId()).stream()
@@ -57,4 +51,5 @@ public class MatchesService {
             );
         }).collect(Collectors.toList());
     }
+
 }

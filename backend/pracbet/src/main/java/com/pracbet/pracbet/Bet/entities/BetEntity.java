@@ -53,6 +53,15 @@ public class BetEntity {
     @Column(name = "maxPayout")
     private BigDecimal maxPayout;
 
+    @Column(name = "stakeUnits")
+    private Integer stakeUnits;
+
+    @Column(name = "profitUnits", precision = 10, scale = 2)
+    private BigDecimal profitUnits;
+
+    @Column(name = "rankCounted")
+    private Boolean rankCounted;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "statusBetEnum")
     private StatusBetEnum statusBetEnum;

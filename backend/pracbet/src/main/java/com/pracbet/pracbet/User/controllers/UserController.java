@@ -1,12 +1,10 @@
 package com.pracbet.pracbet.User.controllers;
 
 import com.pracbet.pracbet.User.dtos.*;
-import com.pracbet.pracbet.User.entities.UserEntity;
 import com.pracbet.pracbet.User.infra.security.TokenService;
 import com.pracbet.pracbet.User.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,12 +31,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login (@RequestBody UserLoginInputDto userLoginInputDto){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(userLoginInputDto.username(), userLoginInputDto.password());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
-
-        var token = tokenService.generateToken((UserEntity) auth.getPrincipal());
-
-        return ResponseEntity.ok(new LoginResponseDto(token));
+        return userService.login(userLoginInputDto);
     }
 
     @PutMapping("/{id}")

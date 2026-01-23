@@ -2,10 +2,14 @@ package com.pracbet.pracbet.User.services;
 
 import com.pracbet.pracbet.User.dtos.*;
 import com.pracbet.pracbet.User.entities.UserEntity;
+import com.pracbet.pracbet.User.enums.UserRoleEnum;
 import com.pracbet.pracbet.User.exceptions.*;
+import com.pracbet.pracbet.User.infra.security.TokenService;
 import com.pracbet.pracbet.User.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,10 +25,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     public ResponseEntity<UserResponseDto> registerUser (UserRegisterInputDto userRegisterInputDto){
@@ -43,6 +51,7 @@ public class UserService {
         user.setUsername(userRegisterInputDto.username());
         user.setEmail(userRegisterInputDto.email());
         user.setPassword(new BCryptPasswordEncoder().encode(userRegisterInputDto.password()));
+        user.setRole(UserRoleEnum.USER);
         user.setBalance(BigDecimal.valueOf(1000));
         user.setTotalBets(0);
         user.setCreatedAt(LocalDateTime.now());
@@ -59,6 +68,22 @@ public class UserService {
                         savedUser.getCreatedAt()
                 )
         );
+    }
+
+    public ResponseEntity<LoginResponseDto> login(UserLoginInputDto userLoginInputDto){
+        var usernamePassword = new UsernamePasswordAuthenticationToken(userLoginInputDto.username(), userLoginInputDto.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+
+        var token = tokenService.generateToken((UserEntity) auth.getPrincipal());
+
+
+        return ResponseEntity.ok(new LoginResponseDto(
+                ((UserEntity) auth.getPrincipal()).getId(),
+                ((UserEntity) auth.getPrincipal()).getUsername(),
+                ((UserEntity) auth.getPrincipal()).getRole(),
+                ((UserEntity) auth.getPrincipal()).getBalance(),
+                token
+        ));
     }
 
     public ResponseEntity<UserResponseUpdateDto> editUser (Long id, UpdateUsernameDto updateUsernameDto){
@@ -105,7 +130,14 @@ public class UserService {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
+                user.getRole(),
                 user.getBalance(),
+                user.getTotalBets(),
+                user.getTotalBetsWon(),
+                user.getTotalBetsLost(),
+                user.getTotalProfitUnits(),
+                user.getRoiPercentage(),
+                user.getLevel(),
                 user.getCreatedAt(),
                 user.getUpdatedAt(),
                 user.getIsActive()
@@ -120,7 +152,14 @@ public class UserService {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
+                user.getRole(),
                 user.getBalance(),
+                user.getTotalBets(),
+                user.getTotalBetsWon(),
+                user.getTotalBetsLost(),
+                user.getTotalProfitUnits(),
+                user.getRoiPercentage(),
+                user.getLevel(),
                 user.getCreatedAt(),
                 user.getUpdatedAt(),
                 user.getIsActive()

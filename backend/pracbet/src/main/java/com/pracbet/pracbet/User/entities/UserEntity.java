@@ -48,16 +48,38 @@ public class UserEntity implements UserDetails {
     @Column(name = "balance")
     private BigDecimal balance;
 
-    @Column(name = "totalBets")
-    private int totalBets;
+    @Column(name = "total_bets")
+    private int totalBets = 0;
 
-    @Column(name = "createdAt")
+    @Column(name = "total_bets_won")
+    private int totalBetsWon = 0;
+
+    @Column(name = "total_bets_lost")
+    private int totalBetsLost = 0;
+
+    @Column(name = "total_stake_units")
+    private Integer totalStakeUnits = 0;
+
+    @Column(name = "total_profit_units", precision = 18, scale = 2)
+    private BigDecimal totalProfitUnits = BigDecimal.valueOf(0);
+
+    @Column(name = "roi_percentage", precision = 10, scale = 2)
+    private BigDecimal roiPercentage = BigDecimal.valueOf(0);
+
+    @Column(nullable = false)
+    private int level = 1;
+
+    @Column(nullable = false)
+    private int xp = 0;
+
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "isActive")
+    @Column(name = "is_active")
     private Boolean isActive;
 
 

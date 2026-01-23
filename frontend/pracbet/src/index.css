@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-neutral-dark;
+  }
+  
+  body {
+    @apply bg-neutral-light text-gray-800 font-sans;
+    min-height: 100vh;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-gray-900 font-semibold;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .card {
+    @apply bg-white border border-neutral-dark rounded-lg;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .btn-primary {
+    @apply bg-orange text-white font-medium py-2.5 px-5 rounded-lg;
+  }
+
+  .btn-secondary {
+    @apply bg-neutral text-gray-700 font-medium py-2.5 px-5 rounded-lg border border-neutral-dark;
+  }
+
+  /* Animações para ranking */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
