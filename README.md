@@ -1,78 +1,235 @@
-# 🟡 PRACBET — Plataforma Gamificada de Apostas Esportivas
+# 🎯 PracBet --- Plataforma Gamificada de Apostas Virtuais por Pontos
 
-PRACBET é um sistema completo de apostas esportivas com visual moderno, estrutura robusta em Java/Spring Boot no backend e Angular no frontend. O projeto tem como proposta não apenas simular casas de apostas tradicionais, mas também evoluir para uma experiência gamificada com competições PvP e simulação de estratégias.
+**Projeto Full-Stack \| Backend em Java Spring Boot \| Frontend em
+React**
 
----
+> **STATUS: EM DESENVOLVIMENTO**\
+> Este projeto é um sistema completo de apostas esportivas com pontos
+> virtuais, gamificação avançada, simulação estatística e foco em boas
+> práticas arquiteturais.
 
-### 🧠 Visão Geral
+------------------------------------------------------------------------
 
-O objetivo do projeto é desenvolver uma plataforma onde usuários possam apostar com pontos fictícios (sem envolvimento financeiro real) em jogos reais e também disputar entre si de forma divertida e estratégica.
+# 📌 Visão Geral
 
-As apostas funcionam com odds realistas, mercados variados e uma base de dados alimentada via API ou inserções simuladas. Em breve, o sistema será expandido com partidas entre jogadores (PvP), rankings e modos de jogo similares a "GeoGuessr" e "modo sobrevivência".
+O **PracBet** é uma plataforma de apostas **sem dinheiro real**,
+construída para aprendizado, entretenimento e experimentação de
+estratégias.\
+A aplicação é um projeto de longo prazo, servindo como base real para
+evolução profissional e demonstração profunda de habilidades Full Stack
+--- com forte ênfase no backend Java.
 
----
+------------------------------------------------------------------------
 
-### ✅ Funcionalidades já implementadas
+# 🏛️ Arquitetura Geral
 
-- [x] Integração com API de jogos de futebol (RapidAPI - API-Football)
-- [x] Cadastro e atualização automática de partidas via agendamentos (`@Scheduled`)
-- [x] Backend com Spring Boot e PostgreSQL
-- [x] Frontend Angular moderno com layout responsivo
-- [x] Tela principal listando partidas com:
-  - Nome dos times
-  - Escudos
-  - Liga/campeonato
-  - Odds (valores de aposta)
-- [x] Tela de detalhes da partida com:
-  - Mercados como: Resultado Final, Ambos Marcam, Dupla Chance
-  - Visual estilo casas de aposta reais
-- [x] Filtro de jogos por campeonato
-- [x] Sistema de persistência com verificação de duplicatas via `fixtureId`
+## Backend -- Java Spring Boot (Core do Sistema)
 
----
+-   Java 17\
+-   Spring Boot 3\
+-   Spring Web\
+-   Spring Security (JWT)\
+-   Spring Data JPA\
+-   PostgreSQL\
+-   Maven\
+-   Modelo orientado ao domínio e escalabilidade\
+-   Camadas claras (Controller → Service → Repository)
 
-### 🧰 Tecnologias e Stack
+O backend é a espinha dorsal do sistema, responsável por: - autenticação
+JWT, - gestão completa de apostas, - cálculos de lucro/ROI/unidades, -
+ranking global, - busca de partidas reais e odds, - estrutura para modos
+PvP e simulações futuras.
 
-#### Backend
-- Java 17
-- Spring Boot (REST API)
-- Spring Data JPA + Hibernate
-- PostgreSQL
-- Agendador com `@Scheduled`
-- Integração com API externa (RapidAPI - API-Football)
+------------------------------------------------------------------------
 
-#### Frontend
-- Angular 17
-- TypeScript
-- SCSS/CSS com design escuro e responsivo
-- Consumo de API REST com HttpClient
-- Componentização com Angular Standalone Components
+## Frontend -- React + Vite
 
----
+-   React 18\
+-   TypeScript\
+-   Tailwind CSS (via Cursor)\
+-   Context API (autenticação)\
+-   React Router DOM\
+-   Arquitetura de componentes\
+-   Interface responsiva, moderna e leve
 
-### 🧪 Prints do Projeto (telas em desenvolvimento)
+------------------------------------------------------------------------
 
-#### 🏠 Tela Inicial – Listagem de Jogos
-![tela inicial (em desenvolvimento)](https://github.com/user-attachments/assets/1e3e2363-2de0-4293-948f-a356a0dda297)
+# 🔥 Principais Diferenciais Técnicos
 
+### Backend pensado para produção
 
-#### 📊 Tela de Detalhes – Mercados de Apostas
-![tela partida (em desenvolvimento)](https://github.com/user-attachments/assets/5e1c6b55-f505-4969-b809-e1cdcc2af6d5)
+-   DTOs bem definidos\
+-   Entidades ricas\
+-   Regras de negócio centralizadas em serviços\
+-   Segregação clara de camadas\
+-   Tokenização JWT profissional\
+-   Preparação para real-time (WebSockets)
 
+### Sistema completo de apostas
 
----
+-   múltiplos mercados suportados:
+    -   Match Winner\
+    -   Both Teams Score\
+    -   Corners Over/Under\
+    -   Cards Over/Under\
+    -   Shots On Target\
+-   cálculo automático de:
+    -   unidades,
+    -   lucro,
+    -   retorno,
+    -   ROI.
 
-### 🚀 Próximos passos (Roadmap)
+### Ranking profissional
 
-- [ ] Sistema completo de **gamificação PvP**
-  - Modos 1x1 e ranqueados
-  - Pontuação por vitória, apostas certas, streaks etc.
-- [ ] Simulador de estratégias de apostas com estatísticas históricas
-- [ ] Sistema de **ranking global** e **perfil do jogador**
-- [ ] Modo “Sobrevivência” com apostas em sequência
-- [ ] Notificações em tempo real com WebSocket
-- [ ] Backend mais performático com caching para odds estáticas
-- [ ] Inclusão de outros esportes (ex: Counter-Strike já listado na lateral)
-- [ ] Painel administrativo para gerenciar partidas e odds
+-   baseado em métricas usadas por tipsters reais.\
+-   posição dinâmica por usuário.
 
----
+### Gamificação real
+
+-   sistema de níveis\
+-   evolução por XP\
+-   estatísticas completas do usuário
+
+### Estrutura para futuro modo PvP
+
+-   partidas 1v1 estilo "Modo Sobrevivência", usando jogos antigos\
+-   simulações e engine própria
+
+------------------------------------------------------------------------
+
+# 🗄️ Banco de Dados
+
+Entidades principais: - **User**\
+- **Bet**\
+- **Match**\
+- **Odds**\
+- **User Stats**\
+- **Ranking**
+
+------------------------------------------------------------------------
+
+# 🔌 Endpoints da Aplicação (completos e atuais)
+
+## USER `/user`
+
+### POST `/register`
+
+Registrar novo usuário.
+
+### POST `/login`
+
+Autenticação + JWT.
+
+### PUT `/{id}`
+
+Editar username do usuário.
+
+### GET `/`
+
+Listar todos os usuários ativos.
+
+### GET `/{id}`
+
+Buscar usuário por ID.
+
+### DELETE `/{id}`
+
+Desativar usuário.
+
+------------------------------------------------------------------------
+
+## RANKING `/ranking`
+
+### GET `/ranking?userId={id?}`
+
+Retorna ranking geral e posição do usuário (opcional).
+
+------------------------------------------------------------------------
+
+## MATCHES `/matches`
+
+### GET `/matches`
+
+Lista de partidas não iniciadas.
+
+------------------------------------------------------------------------
+
+## ODDS `/odds`
+
+### GET `/odds/{id}`
+
+Retorna odds de uma partida específica.
+
+------------------------------------------------------------------------
+
+## BET `/bet`
+
+### POST `/bet`
+
+Criar uma nova aposta.
+
+### GET `/bet/{userId}?status=&result=`
+
+Listar apostas filtrando por: - status (`Pending`, `Settled`, `Void`,
+`Rejected`) - resultado (`Won`, `Lost`, `Void`, `Refunded`)
+
+------------------------------------------------------------------------
+
+# 📁 Estrutura do Projeto
+
+    pracbet/
+    ├── backend/
+    │   ├── controllers/
+    │   ├── services/
+    │   ├── repositories/
+    │   ├── entities/
+    │   ├── enums/
+    │   ├── dtos/
+    │   ├── security/
+    │   └── resources/
+    │
+    └── frontend/
+        ├── components/
+        ├── pages/
+        ├── context/
+        ├── services/
+        ├── types/
+        └── utils/
+
+------------------------------------------------------------------------
+
+# 🚀 Como Executar
+
+## Backend
+
+    cd backend/pracbet
+    mvn clean install
+    mvn spring-boot:run
+
+## Frontend
+
+    cd frontend/pracbet
+    npm install
+    npm run dev
+
+------------------------------------------------------------------------
+
+# 🛣️ Roadmap Realista
+
+### Backend
+
+-   Engine PvP\
+-   WebSockets\
+-   Simulação de jogos históricos\
+-   Sistema completo de XP\
+-   Módulo de achievements
+
+### Frontend
+
+-   Tela avançada de estatísticas\
+-   Interface de batalhas PvP\
+-   Melhor experiência visual de mercados
+
+------------------------------------------------------------------------
+
+⭐ Este projeto está em evolução contínua.
