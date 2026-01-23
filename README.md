@@ -19,6 +19,8 @@ A aplicação é um projeto de longo prazo, servindo como base real para
 evolução profissional e demonstração profunda de habilidades Full Stack
 --- com forte ênfase no backend Java.
 
+Vídeo de demonstração da plataforma: https://www.youtube.com/watch?v=JYoIaYjB450
+
 ------------------------------------------------------------------------
 
 # 🏛️ Arquitetura Geral
